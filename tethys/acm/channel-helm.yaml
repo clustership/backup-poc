@@ -1,0 +1,8 @@
+apiVersion: apps.open-cluster-management.io/v1
+kind: Channel
+metadata:
+  name: chartmuseum-local
+  namespace: tethys-app
+spec:
+  pathname: http://chartmuseum-chartmuseum.apps.ocp4-acm.openshift-v4.dcpro31.opk.recouv
+  type: HelmRepo

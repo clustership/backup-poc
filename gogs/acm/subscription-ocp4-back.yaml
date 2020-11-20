@@ -1,0 +1,35 @@
+apiVersion: apps.open-cluster-management.io/v1
+kind: Subscription
+metadata:
+  annotations:
+  labels:
+    app: gogs
+  name: gogs-subscription-back-0
+spec:
+  channel: gogs-multicluster/chartmuseum-local
+  name: gogs-helm-umbrella
+  packageOverrides:
+  - packageName: gogs-helm-umbrella
+    packageAlias: gogs
+    packageOverrides:
+    - path: spec
+      value:
+        image:
+          pullPolicy: IfNotPresent
+          # Overrides the image tag whose default is the chart appVersion.
+          tag: ""
+
+        nodePort: 31639
+
+        tags:
+          front-end: false
+          backend: true
+
+        global:
+          postgresql:
+            postgresqlUsername: gogs
+            postgresqlPassword: gogslebponge616
+  placement:
+    placementRef:
+      kind: PlacementRule
+      name: gogs-placement-backend

@@ -1,0 +1,108 @@
+apiVersion: apps.open-cluster-management.io/v1
+kind: Subscription
+metadata:
+  annotations:
+  labels:
+    app: tethys
+  name: tethys-subscription-back-0
+  namespace: tethys-app
+spec:
+  channel: tethys-app/chartmuseum-local
+  name: charts-tethys
+  packageOverrides:
+  - packageName: charts-tethys
+    packageAlias: tethys
+    packageOverrides:
+    - path: spec
+      value:
+        backend:
+          configuration:
+            api:
+              deci:
+                archimed: true
+                basePath: /deci_be/deci/v3
+                scope: DECI
+                url: http://gateway.clea1.giin.recouv
+              idre:
+                archimed: true
+                basePath: /ga-idre-api/v2/deprecated
+                scope: SNV2-GA-BE
+                url: http://gateway.clea1.giin.recouv
+              rei:
+                archimed: true
+                basePath: /ga-rei-api/v1/deprecated
+                scope: REI-BE
+                url: http://gateway.clea1.giin.recouv
+            archimed:
+              apiUrl: https://gateway.clea1.giin.recouv
+              applicationId: ODS-MARIN-BE
+              clientId: cn=USR_READ_NAT_APP_ODS-MARIN-BE,ou=ODS-MARIN-BE,ou=Applications,ou=Technique,dc=recouv
+              clientSecret: ODS-MARIN-BE:PassW18
+              gatewayUrl: https://gateway.clea1.giin.recouv
+              prismeActif: false
+            cryptoKey: portailipassword
+            odsKey: /app/tethys/keys/ods_public_key.sdit.pem
+            tokenBdsActif: false
+          deployment:
+            limitsMemory: 1Gi
+            replicas: 1
+            tag: latest
+          name: tethys-backend
+          service:
+            port: 9090
+            portActuator: 9091
+            type: ClusterIP
+        clusterName: staging
+        database:
+          host: tethys-postgresql
+          name: tethys
+          password: pgtethys
+          port: 5432
+          replicas: 1
+          type: internal
+          username: pgtethys
+        frontend:
+          configuration:
+            archimed:
+              actif: false
+              clientId: 63e0837a-2eed-4e72-b9c7-577621633ce2
+              clientSecret: 89ec0643-511b-4a8d-b4ac-1edc51a484c9
+              scope: openid ods.marins deci.marins
+            backendHost: tethys-app.apps.ocp4-back.openshift-v4.dcpro31.opk.recouv
+            backendUrl: /tethys/v1
+            urlArchimedGateway: https://api.clea1.giin.urssaf.fr
+            urlArchimedGatewayEndpoint: https://api.clea1.giin.urssaf.fr/api/oauth/v1/token
+            urlBeDeci: /deci_be/deci/v3
+            urlBeDeciHost: tethys-app.apps.ocp4-back.openshift-v4.dcpro31.opk.recouv
+          deployment:
+            limitsMemory: 500Mi
+            name: tethys-frontend
+            replicas: 1
+            tag: latest
+          service:
+            name: tethys-frontend
+            port: 80
+            type: ClusterIP
+        global:
+          postgresql:
+            database: tethys
+            postgresqlPassword: pgtethys
+            postgresqlUsername: pgtethys
+        ingress:
+          enabled: true
+          hosts:
+            frontend: tethys-app.apps.ocp4-back.openshift-v4.dcpro31.opk.recouv
+          tls:
+            enabled: true
+            secretName: tethys-frontend-ingress
+        mocks:
+          enabled: false
+        referentiels:
+          deployment:
+            tag: latest
+          name: tethys-referentiels
+        registry: harbor.mutual31.k8s.recouv
+  placement:
+    placementRef:
+      kind: PlacementRule
+      name: tethys-placement-backend
