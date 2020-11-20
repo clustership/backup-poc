@@ -6,7 +6,7 @@ metadata:
     app: gogs
   name: gogs-subscription-back-0
 spec:
-  channel: gogs-multicluster/chartmuseum-local
+  channel: demo-gogs-multicluster/chartmuseum-local
   name: gogs-helm-umbrella
   packageOverrides:
   - packageName: gogs-helm-umbrella

@@ -4,7 +4,7 @@ metadata:
   labels:
     app: gogs
   name: gogs-placement-frontend
-  namespace: gogs-multicluster
+  namespace: demo-gogs-multicluster
 spec:
   clusterSelector:
     matchLabels:
@@ -16,7 +16,7 @@ metadata:
   labels:
     app: gogs
   name: gogs-placement-backend
-  namespace: gogs-multicluster
+  namespace: demo-gogs-multicluster
 spec:
   clusterSelector:
     matchLabels:
@@ -28,7 +28,7 @@ metadata:
   labels:
     app: gogs
   name: gogs-placement-dmz
-  namespace: gogs-multicluster
+  namespace: demo-gogs-multicluster
 spec:
   clusterSelector:
     matchLabels:
